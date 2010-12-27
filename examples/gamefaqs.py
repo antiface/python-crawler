@@ -1,6 +1,6 @@
-from fetch import Fetcher, CachedFetcher, FetchEngine
-from parse import HtmlParser
-from map import URLMapper
+from crawler.fetch import Fetcher, CachedFetcher, FetchEngine
+from crawler.parse import HtmlParser
+from crawler.map import URLMapper
 from urlparse import urlsplit
 import os.path
 
