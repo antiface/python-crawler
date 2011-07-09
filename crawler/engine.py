@@ -1,6 +1,7 @@
 import time
 from collections import defaultdict
 
+
 class FetchEngine():
   """ Helper class for queueing uris and such for fetch """
   def __init__(self):

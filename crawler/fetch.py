@@ -1,21 +1,18 @@
 import pycurl
 from cStringIO import StringIO
 from .util import makedirs
+from .cookies import CookieFile
 
 
 class Fetcher(object):
   """ Basic pycurl-based fetcher """
-
-  __COOKIEFILE__ = '/tmp/pycurl-cookies'
+  cookies = CookieFile()
   rawheaders = None
   _handle = None
 
   def __init__(self, url):
     self.url = url
     self.fetched = False
-
-  def get_cookie_file(self):
-    return self.__COOKIEFILE__
 
   def __enter__(self):
     return self
@@ -30,8 +27,13 @@ class Fetcher(object):
     self._handle = pycurl.Curl()
     self._response_io = StringIO()
     self._headers_io = StringIO()
-    self._handle.setopt(pycurl.COOKIEFILE, self.get_cookie_file())
-    self._handle.setopt(pycurl.COOKIEJAR, self.get_cookie_file())
+
+    # If no cookie file is set, don't use it
+    cookiefile = self.cookies.get_cookie_file()
+    if cookiefile:
+      self._handle.setopt(pycurl.COOKIEFILE, cookiefile)
+      self._handle.setopt(pycurl.COOKIEJAR, cookiefile)
+
     self._handle.setopt(pycurl.URL, self.url)
     self._handle.setopt(pycurl.WRITEFUNCTION, self._response_io.write)
     self._handle.setopt(pycurl.HEADERFUNCTION, self._headers_io.write)
