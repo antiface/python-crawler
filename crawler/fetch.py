@@ -1,5 +1,7 @@
 import pycurl
 from cStringIO import StringIO
+from .util import makedirs
+
 
 class Fetcher(object):
   """ Basic pycurl-based fetcher """
@@ -57,17 +59,16 @@ class Fetcher(object):
 
     return self._response_io
 
+
 import urllib 
 import os.path
+
 
 class CachedFetcher(Fetcher):
   __CACHE_DIR__ = '/tmp/fetchcache'
   def _check_dir(self):
     """ makes the __CACHE_DIR__ for this instance if it doesn't exist """
-    try:
-      os.mkdir(self.__CACHE_DIR__)
-    except OSError:
-      pass
+    makedirs(self.__CACHE_DIR__)
 
   def get_url_cache_file(self):
     """ Returns the response body cache filename for this url """
