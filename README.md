@@ -8,3 +8,4 @@ python-crawler depends on (at least) the following other packages for now:
 
 * lxml
 * pycurl
+* html5lib
