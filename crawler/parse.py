@@ -1,5 +1,6 @@
 import html5lib
 from cStringIO import StringIO
+from .model import ModelNode
 
 class HtmlParser():
   __REPR_METADATA__ = []
@@ -11,11 +12,8 @@ class HtmlParser():
   def _parse(self):
     self.document = html5lib.parse(self._stream, treebuilder="lxml")
 
-  NS = {'x': 'http://www.w3.org/1999/xhtml'}
-
   def xpath(self, query, node = None):
-    node = node or self.document
-    return node.xpath(query, namespaces=self.NS)
+    return ModelNode(node or self.document).xpath(query)
 
   @classmethod
   def from_string(cls, s):
@@ -31,7 +29,6 @@ class HtmlParser():
       return node.text
 
     s = ''
-    print dir(node)
     for node in node.iterchildren():
       s += self.get_text(node)
 
